@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>הרפתקאות אלגוריתמיות</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="start-hint" hidden>
+      <div class="hint-card">
+        <div class="hint-emoji">🐢</div>
+        <div>לחצו כדי להתחיל</div>
+      </div>
+    </div>
+
+    <div id="unsupported" hidden>
+      יש לפתוח את המשחק ב‑Chrome למחשב כדי שהמיקרופון יעבוד.
+    </div>
+
+    <main id="app">
+      <header>
+        <div id="level-label" aria-label="level"></div>
+      </header>
+
+      <div id="board" aria-label="maze board"></div>
+
+      <div id="log" aria-label="command log"></div>
+
+      <div id="controls">
+        <button id="btn-reset" class="btn btn-yellow" aria-label="reset">
+          <svg viewBox="0 0 24 24" width="56" height="56">
+            <path fill="currentColor" d="M9 3v1H4v2h1l1 14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-14h1V4h-5V3H9zm1 5h1v10h-1V8zm3 0h1v10h-1V8z"/>
+          </svg>
+        </button>
+        <button id="btn-go" class="btn btn-green" aria-label="go">
+          <svg viewBox="0 0 24 24" width="64" height="64">
+            <path fill="currentColor" d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+        <button id="btn-mic" class="btn btn-red" aria-label="record">
+          <svg viewBox="0 0 24 24" width="64" height="64">
+            <path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
+          </svg>
+        </button>
+      </div>
+    </main>
+
+    <script type="module" src="js/game.js"></script>
+  </body>
+</html>

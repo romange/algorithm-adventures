@@ -1,0 +1,10 @@
+{
+  "name": "algorithm-adventures",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hebrew voice-controlled coding game for pre-readers",
+  "scripts": {
+    "start": "python3 -m http.server 8000"
+  }
+}
