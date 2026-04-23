@@ -1,7 +1,7 @@
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = SR ? new SR() : null;
 
-const INITIAL_SILENCE_MS = 7000;
+const INITIAL_SILENCE_MS = 5000;
 const POST_SPEECH_SILENCE_MS = 3000;
 
 if (recognition) {

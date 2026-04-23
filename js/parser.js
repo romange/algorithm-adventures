@@ -45,8 +45,21 @@ function normalize(text) {
     .trim();
 }
 
+function stripWaw(tok) {
+  return tok.length > 1 && tok.startsWith('ו') ? tok.slice(1) : tok;
+}
+
+function tokenDirection(tok) {
+  if (DIRECTION_WORDS[tok]) return DIRECTION_WORDS[tok];
+  const s = stripWaw(tok);
+  if (s !== tok && DIRECTION_WORDS[s]) return DIRECTION_WORDS[s];
+  return null;
+}
+
 function tokenNumber(tok) {
   if (NUMBER_WORDS[tok] !== undefined) return NUMBER_WORDS[tok];
+  const s = stripWaw(tok);
+  if (s !== tok && NUMBER_WORDS[s] !== undefined) return NUMBER_WORDS[s];
   if (/^\d+$/.test(tok)) {
     const n = parseInt(tok, 10);
     if (n >= 1 && n <= 10) return n;
@@ -70,15 +83,16 @@ export function parseCommands(transcript) {
   };
 
   for (const tok of tokens) {
-    if (DIRECTION_WORDS[tok]) {
+    const dir = tokenDirection(tok);
+    if (dir) {
       if (pendingDir) flush();
-      pendingDir = DIRECTION_WORDS[tok];
-    } else {
-      const n = tokenNumber(tok);
-      if (n !== null) {
-        if (pendingDir && pendingCount !== null) flush();
-        pendingCount = n;
-      }
+      pendingDir = dir;
+      continue;
+    }
+    const n = tokenNumber(tok);
+    if (n !== null) {
+      if (pendingDir && pendingCount !== null) flush();
+      pendingCount = n;
     }
   }
   flush();

@@ -66,11 +66,61 @@ export function makeLettuce(x, y) {
     class: 'lettuce',
     transform: `translate(${cx} ${cy})`
   });
-  g.appendChild(el('circle', { cx: 0, cy: 4, r: 28, fill: '#66BB6A', stroke: '#2E7D32', 'stroke-width': 2 }));
-  g.appendChild(el('circle', { cx: -10, cy: -6, r: 16, fill: '#81C784' }));
-  g.appendChild(el('circle', { cx: 10, cy: -4, r: 14, fill: '#A5D6A7' }));
-  g.appendChild(el('circle', { cx: 0, cy: 10, r: 14, fill: '#81C784' }));
-  g.appendChild(el('circle', { cx: -4, cy: 0, r: 8, fill: '#C8E6C9' }));
+
+  // Curly outer leaf: wavy edges, tapers at the stem end (0,0) and top (0,-30)
+  const outerLeaf =
+    'M 0 -4 ' +
+    'C -6 -6 -11 -9 -13 -14 ' +
+    'C -16 -17 -13 -20 -14 -23 ' +
+    'C -11 -24 -10 -27 -6 -26 ' +
+    'C -3 -29 0 -30 0 -30 ' +
+    'C 3 -29 6 -26 6 -26 ' +
+    'C 10 -27 11 -24 14 -23 ' +
+    'C 13 -20 16 -17 13 -14 ' +
+    'C 11 -9 6 -6 0 -4 Z';
+
+  for (let i = 0; i < 6; i++) {
+    g.appendChild(el('path', {
+      d: outerLeaf,
+      fill: '#2E7D32',
+      stroke: '#1B5E20',
+      'stroke-width': 1.3,
+      'stroke-linejoin': 'round',
+      transform: `rotate(${i * 60})`
+    }));
+  }
+
+  // Inner leaves — smaller, brighter, rotated between outer leaves
+  const innerLeaf =
+    'M 0 -3 ' +
+    'C -5 -5 -9 -8 -9 -13 ' +
+    'C -11 -16 -7 -18 -5 -19 ' +
+    'C -2 -21 0 -22 0 -22 ' +
+    'C 2 -21 5 -19 5 -19 ' +
+    'C 7 -18 11 -16 9 -13 ' +
+    'C 9 -8 5 -5 0 -3 Z';
+
+  for (let i = 0; i < 6; i++) {
+    g.appendChild(el('path', {
+      d: innerLeaf,
+      fill: '#66BB6A',
+      stroke: '#388E3C',
+      'stroke-width': 1,
+      'stroke-linejoin': 'round',
+      transform: `rotate(${i * 60 + 30})`
+    }));
+  }
+
+  // Heart of the lettuce — pale center dot
+  g.appendChild(el('circle', {
+    cx: 0, cy: 0, r: 6,
+    fill: '#C8E6C9', stroke: '#81C784', 'stroke-width': 1
+  }));
+  g.appendChild(el('circle', {
+    cx: -1.5, cy: -1.5, r: 2.5,
+    fill: '#F1F8E9'
+  }));
+
   return g;
 }
 
