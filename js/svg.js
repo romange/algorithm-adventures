@@ -12,8 +12,8 @@ export function createBoard(parent) {
   const svg = el('svg', {
     xmlns: SVG_NS,
     viewBox: `0 0 ${GRID * TILE} ${GRID * TILE}`,
-    width: GRID * TILE,
-    height: GRID * TILE,
+    width: '100%',
+    height: '100%',
     class: 'board'
   });
   const bg = el('rect', {

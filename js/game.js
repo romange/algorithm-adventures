@@ -472,12 +472,43 @@ async function onMicClick() {
     onResult: handleTranscript,
     onEnd: () => {
       setRecording(false);
+      if (state.phase === 'recording') state.phase = 'idle';
     },
-    onError: async () => {
+    onError: async (errCode) => {
+      console.error('SpeechRecognition error:', errCode);
       setRecording(false);
-      await speak('לא הבנתי, אפשר לנסות שוב?');
+      state.phase = 'idle';
+      if (errCode === 'not-allowed' || errCode === 'service-not-allowed') {
+        await speak('נא לאפשר גישה למיקרופון בדפדפן.');
+      } else {
+        await speak('לא הבנתי, אפשר לנסות שוב?');
+      }
     }
   });
+}
+
+function parseKeyboardInput(text) {
+  const cmds = [];
+  const re = /([udlr])(\d*)/gi;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const dir = { u: 'up', d: 'down', l: 'left', r: 'right' }[m[1].toLowerCase()];
+    const count = m[2] ? Math.min(parseInt(m[2], 10), 10) : 1;
+    cmds.push({ direction: dir, count });
+  }
+  return cmds;
+}
+
+function onKeyboardSubmit() {
+  if (state.phase === 'executing') return;
+  const input = els.keyboardInput;
+  const text = input.value.trim();
+  input.value = '';
+  if (!text) return;
+  const cmds = parseKeyboardInput(text);
+  if (cmds.length === 0) return;
+  for (const cmd of cmds) enqueueIcon(cmd);
+  setPulse(els.go, true);
 }
 
 async function handleTranscript(transcript) {
@@ -587,6 +618,7 @@ async function runTutorialIntro() {
 function init() {
   els.board = document.getElementById('board');
   els.log = document.getElementById('log');
+  els.keyboardInput = document.getElementById('keyboard-input');
   els.mic = document.getElementById('btn-mic');
   els.go = document.getElementById('btn-go');
   els.reset = document.getElementById('btn-reset');
@@ -604,6 +636,9 @@ function init() {
   els.mic.addEventListener('click', onMicClick);
   els.go.addEventListener('click', onGoClick);
   els.reset.addEventListener('click', onResetClick);
+  els.keyboardInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); onKeyboardSubmit(); }
+  });
 
   loadLevel(0);
 
